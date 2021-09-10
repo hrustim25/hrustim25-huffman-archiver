@@ -1,5 +1,5 @@
 grade:
-  image: eu.gcr.io/hse-ts/cpp-course
+  image: cr.yandex/crpkun66rq02t8mpkpa4/cpp-course
   only:
     - /^submits/.*$/
   script:
