@@ -32,7 +32,10 @@ function(add_hse_executable NAME)
   endif()
 
   if (ENABLE_PRIVATE_TESTS)
-    prepend(SHAD_LIBRARY_PRIVATE_TESTS "../private/${TASK_NAME}" ${SHAD_LIBRARY_PRIVATE_TESTS})
+    file(GLOB SHAD_LIBRARY_PRIVATE_TESTS
+      "../../private/${TASK_NAME}/*.h"
+      "../../private/${TASK_NAME}/*.cpp"
+    )
   endif()
 
   if (TEST_SOLUTION)
