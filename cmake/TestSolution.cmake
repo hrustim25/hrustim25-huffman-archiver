@@ -2,6 +2,8 @@ option(TEST_SOLUTION "Build solution" OFF)
 option(ENABLE_PRIVATE_TESTS "Enable private tests" OFF)
 option(GRADER "Building on CI" OFF)
 
+message("!")
+
 function(patch_include_directories TARGET)
   if (TEST_SOLUTION)
     get_filename_component(TASK_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
@@ -32,14 +34,16 @@ function(add_hse_executable NAME)
   endif()
 
   if (ENABLE_PRIVATE_TESTS)
+    set(TASK_PRIVATE_TESTS_DIR "../../private/${TASK_NAME}/tests")
+
     file(GLOB SHAD_LIBRARY_PRIVATE_TESTS
-      "../../private/${TASK_NAME}/*.h"
-      "../../private/${TASK_NAME}/*.cpp"
+      "${TASK_PRIVATE_TESTS_DIR}/*.h"
+      "${TASK_PRIVATE_TESTS_DIR}/*.cpp"
     )
   endif()
 
   if (TEST_SOLUTION)
-    file(COPY "../../private/${TASK_NAME}" DESTINATION "${CMAKE_SOURCE_DIR}/tasks")
+    file(COPY "../../private/${TASK_NAME}/solution/" DESTINATION "${CMAKE_SOURCE_DIR}/tasks/${TASK_NAME}")
   endif()
 
   add_executable(${NAME}

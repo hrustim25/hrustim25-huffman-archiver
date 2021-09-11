@@ -3,7 +3,7 @@ grade:
   only:
     - /^submits/.*$/
   script:
-    - cd /opt/shad && PYTHONPATH=grader SKIP_REPORT=1 python3 -m grader
+    - cd /opt/shad && PYTHONPATH=grader python3 -m grader
   artifacts:
     when: on_failure
     paths:
