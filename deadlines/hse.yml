@@ -1,30 +1,15 @@
 # Add new groups at the bottom
 
-- group:    00-setup
-  start:    17-07-2021 18:00
-  deadline: 21-09-2022 18:00
+- group:    00
+  start:    01-09-2021 00:00
+  deadline: 20-09-2021 00:00
   tasks:
     - task: multiplication
       score: 100
 
-- group:    00-setup-bonus
-  start:    17-07-2021 18:00
-  deadline: 21-09-2022 18:00
+- group:    01
+  start:    11-09-2021 00:00
+  deadline: 20-09-2021 00:00
   tasks:
-    - task: gcd
+    - task: password
       score: 100
-
-- group:    01-move
-  start:    04-09-2021 13:00
-  deadline: 17-09-2021 19:00
-  tasks:
-    - task: dedup
-      score: 100
-    - task: harakiri
-      score: 100
-    - task: rule-of-5
-      score: 100
-    - task: cow-vector
-      score: 150
-    - task: deque
-      score: 250
