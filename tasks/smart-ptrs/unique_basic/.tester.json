@@ -1,5 +1,0 @@
-{
-    "allow_change": "../unique_ptr.h",
-    "tests": "test_unique_basic",
-    "solutions": "private"
-}

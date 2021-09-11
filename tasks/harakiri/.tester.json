@@ -1,6 +1,0 @@
-{
-    "allow_change": "harakiri.h",
-    "tests": "test_harakiri",
-    "solutions": "private"
-}
-

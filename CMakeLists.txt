@@ -18,32 +18,4 @@ include_directories(util)
 add_subdirectory(tasks/multiplication)
 
 # 1
-add_subdirectory(tasks/harakiri)
-add_subdirectory(tasks/deque)
-add_subdirectory(tasks/dedup)
-add_subdirectory(tasks/cow-vector)
-
-# 2
-add_subdirectory(tasks/compressed_pair)
-
-# 3
-add_subdirectory(tasks/bind_front)
-add_subdirectory(tasks/curry)
-add_subdirectory(tasks/stdflib)
-
-# 7
-add_subdirectory(tasks/algo_spec)
-add_subdirectory(tasks/transform_tuple)
-add_subdirectory(tasks/reflection)
-add_subdirectory(tasks/pipes)
-
-# Homeworks
-# 1
-# add_subdirectory(tasks/smart-ptrs)
-
-# Bonuses
-# add_subdirectory(tasks/brainfuck)
-
-# ctf
-add_subdirectory(tasks/gcd)
-add_subdirectory(tasks/rule-of-5)
+add_subdirectory(tasks/password)

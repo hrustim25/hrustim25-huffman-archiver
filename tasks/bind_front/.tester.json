@@ -1,6 +1,0 @@
-{
-    "allow_change": "bind_front.h",
-    "tests": "test_bind_front",
-    "solutions": "private"
-}
-
