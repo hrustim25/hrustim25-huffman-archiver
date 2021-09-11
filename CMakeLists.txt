@@ -19,3 +19,6 @@ add_subdirectory(tasks/multiplication)
 
 # 1
 add_subdirectory(tasks/password)
+
+# 2
+add_subdirectory(tasks/utf8)
