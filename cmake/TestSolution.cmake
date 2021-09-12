@@ -2,8 +2,6 @@ option(TEST_SOLUTION "Build solution" OFF)
 option(ENABLE_PRIVATE_TESTS "Enable private tests" OFF)
 option(GRADER "Building on CI" OFF)
 
-message("!")
-
 function(patch_include_directories TARGET)
   if (TEST_SOLUTION)
     get_filename_component(TASK_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)

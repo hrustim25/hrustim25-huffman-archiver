@@ -1,13 +1,13 @@
 # Add new groups at the bottom
 
-- group:    00
+- group:    00-setup
   start:    01-09-2021 00:00
   deadline: 20-09-2021 00:00
   tasks:
     - task: multiplication
       score: 100
 
-- group:    01
+- group:    01-homework
   start:    11-09-2021 00:00
   deadline: 20-09-2021 00:00
   tasks:
