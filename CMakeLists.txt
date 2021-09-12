@@ -1,4 +1,4 @@
-project(cpp-advanced-hse)
+project(cpp-pilot-hse)
 
 cmake_minimum_required(VERSION 3.8)
 
