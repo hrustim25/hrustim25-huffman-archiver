@@ -1,9 +1,11 @@
 #include <catch.hpp>
 #include <utf8.h>
 
+#include <cstddef>
+
 struct TestData {
     std::string String;
-    std::vector<int> Codepoints;
+    std::vector<uint32_t> Codepoints;
 };
 
 std::vector<TestData> TESTS = {
@@ -12,13 +14,13 @@ std::vector<TestData> TESTS = {
 };
 
 TEST_CASE("CountUtf8Symbols") {
-    for (const auto &test : TESTS) {
+    for (const auto& test : TESTS) {
         REQUIRE(CountUtf8Symbols(test.String) == test.Codepoints.size());
     }
 }
 
 TEST_CASE("EncodeUtf8") {
-    for (const auto &test : TESTS) {
+    for (const auto& test : TESTS) {
         std::string encodedString;
         EncodeUtf8(test.Codepoints, encodedString);
         REQUIRE(encodedString == test.String);
@@ -27,8 +29,8 @@ TEST_CASE("EncodeUtf8") {
 }
 
 TEST_CASE("DecodeUtf8") {
-    for (const auto &test : TESTS) {
-        std::vector<int> decodedCodepoints;
+    for (const auto& test : TESTS) {
+        std::vector<uint32_t> decodedCodepoints;
         DecodeUtf8(test.String, decodedCodepoints);
         REQUIRE(test.Codepoints == decodedCodepoints);
     }
