@@ -11,9 +11,11 @@
   start:    11-09-2021 00:00
   deadline: 19-09-2021 23:59
   tasks:
+    - task: palindrome
+      score: 100
     - task: password
       score: 100
-    - task: palindrome
+    - task: sort_students
       score: 100
     - task: utf8
       score: 200
