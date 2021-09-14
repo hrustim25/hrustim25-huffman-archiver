@@ -18,6 +18,7 @@ include_directories(util)
 add_subdirectory(tasks/multiplication)
 
 # 1
+add_subdirectory(tasks/associative_operation)
 add_subdirectory(tasks/palindrome)
 add_subdirectory(tasks/password)
 add_subdirectory(tasks/sort_students)
