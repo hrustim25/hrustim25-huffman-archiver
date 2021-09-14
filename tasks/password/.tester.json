@@ -1,5 +1,6 @@
 {
     "allow_change": "password.cpp",
     "tests": "test_password",
-    "solutions": "private"
+    "solutions": "private",
+    "linter": false
 }
