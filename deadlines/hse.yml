@@ -2,14 +2,14 @@
 
 - group:    00-setup
   start:    01-09-2021 00:00
-  deadline: 20-09-2021 00:00
+  deadline: 19-09-2021 23:59
   tasks:
     - task: multiplication
       score: 100
 
 - group:    01-homework-one
   start:    11-09-2021 00:00
-  deadline: 20-09-2021 00:00
+  deadline: 19-09-2021 23:59
   tasks:
     - task: password
       score: 100
