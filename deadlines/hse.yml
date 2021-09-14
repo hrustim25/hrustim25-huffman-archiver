@@ -11,6 +11,8 @@
   start:    11-09-2021 00:00
   deadline: 19-09-2021 23:59
   tasks:
+    - task: associative_operation
+      score: 100
     - task: palindrome
       score: 100
     - task: password
