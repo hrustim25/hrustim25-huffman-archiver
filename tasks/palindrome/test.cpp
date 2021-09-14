@@ -3,6 +3,6 @@
 
 TEST_CASE("IsPalindrome") {
     REQUIRE(IsPalindrome("abba"));
-    
+
     REQUIRE(!IsPalindrome("qwerty"));
 }
