@@ -14,6 +14,6 @@
     - task: password
       score: 100
     - task: palindrome
-        score: 100
+      score: 100
     - task: utf8
-        score: 200
+      score: 200
