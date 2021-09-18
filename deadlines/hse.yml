@@ -2,7 +2,7 @@
 
 - group:    00-setup
   start:    01-09-2021 00:00
-  deadline: 19-09-2021 23:59
+  deadline: 22-09-2021 23:59
   tasks:
     - task: multiplication
       score: 100
