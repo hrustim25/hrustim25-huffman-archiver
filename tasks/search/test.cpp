@@ -19,7 +19,7 @@ TEST_CASE("Search") {
         "including versions of Lorem Ipsum.";
 
     std::string_view query = "typesetting release";
-    std::vector<std::string_view> expected = {"the release of Letraset sheets containing Lorem"};
+    std::vector<std::string_view> expected = {"electronic typesetting, remaining essentially"};
 
     REQUIRE(expected == Search(text, query, 1));
 }
