@@ -16,3 +16,21 @@
 
 Учитывайте, что текст может быть достаточно большим. Постарайтесь избегать копирования строк везде, где это возможно.
 
+=== Пример ===
+
+Расчет на примере [из тестов](test.cpp).
+
+`IDF(typesetting) = 2/13` (есть в 2 из 13 строках текста)
+`IDF(release) = 1/13`
+
+Есть 3 строки, которые теоретически подходят под запрос:
+1) `of the printing and typesetting industry.` `TF(typesetting) = 1/6` (одно слово из 6)
+2) `electronic typesetting, remaining essentially` `TF(typesetting) = 1/4`
+3) `the release of Letraset sheets containing Lorem` `TF(release) = 1/7`
+
+Считаем TF-IDF
+1) 1/6 * log(13/2) = 0.31
+2) 1/4 * log(13/2) = 0.47
+3) 1/7 * log(13) = 0.37
+
+Правильный ответ - строка (2)
