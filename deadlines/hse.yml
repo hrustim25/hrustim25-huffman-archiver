@@ -24,7 +24,7 @@
 
 - group:    02-homework-two
   start:    20-09-2021 00:00
-  deadline: 26-09-2021 23:59
+  deadline: 29-09-2021 23:59
   tasks:
     - task: admission
       score: 100
