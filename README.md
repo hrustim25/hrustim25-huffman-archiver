@@ -4,4 +4,6 @@
 
 Дедлайны по задачам можно наблюдать в https://pilot.cpp-hse.org/.
 
-Стайлгайд описан в [STYLEGUIDE.md](STYLEGUIDE.md)
+Стайлгайд описан в [STYLEGUIDE.md](STYLEGUIDE.md).
+
+Правила оценивания в [SCORE.md](SCORE.md).
