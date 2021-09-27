@@ -48,6 +48,6 @@
     - task: scorer2
       score: 100
     - task: search2
-      score: 200
+      score: 100
     - task: unixpath2
       score: 100
