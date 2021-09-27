@@ -7,3 +7,5 @@
 Стайлгайд описан в [STYLEGUIDE.md](STYLEGUIDE.md).
 
 Правила оценивания в [SCORE.md](SCORE.md).
+
+Записи лекций в [LECTURES.md](LECTURES.md).
