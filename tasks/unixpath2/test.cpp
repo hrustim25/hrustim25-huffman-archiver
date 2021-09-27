@@ -18,5 +18,5 @@ TEST_CASE("UnixPath") {
 
     path.ChangeDirectory(".././././tmp/dir/..");
     REQUIRE("/tmp" == path.GetAbsolutePath());
-    REQUIRE("../../tmp" == path.GetRelativePath());
+    REQUIRE("../tmp" == path.GetRelativePath());
 }
