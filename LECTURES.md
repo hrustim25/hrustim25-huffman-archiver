@@ -38,3 +38,10 @@
 - Операторы `new` и `delete`
 
 [Запись](https://disk.yandex.ru/d/UahT37yPYuGX2Q)
+
+### 28.09.2021
+- Разбор КР1
+- Неймспейсы и `using`/`typedef`
+- Классы: поля/методы, конструкторы/деструкторы, `const` и `static` методы, `explicit`
+
+[Запись](https://disk.yandex.ru/i/1JoRzmTlb_tV6Q)
