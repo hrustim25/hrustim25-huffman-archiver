@@ -34,9 +34,9 @@ void Writer::OpenFile(std::string& file) {
 
 void Writer::PushBufferAndCloseFile() {
     if (current_bit_position > 0) {
+        current_bit_position = 0; 
         out_stream << buffer;
         buffer = 0;
-        current_bit_position = 0;
     }
     out_stream.close();
 }

@@ -9,29 +9,26 @@ TrieVertex::TrieVertex(size_t character_count, bool type, size_t character): cha
     is_terminal = type;
 }
 
-TrieVertex::~TrieVertex() {
-    delete left_child;
-    delete right_child;
-}
-
-void TrieVertex::SetLeftChild(TrieVertex* vertex) {
+void TrieVertex::SetLeftChild(std::shared_ptr<TrieVertex> vertex) {
     left_child = vertex;
 }
 
-TrieVertex* TrieVertex::GetLeftChild() const {
+std::shared_ptr<TrieVertex> TrieVertex::GetLeftChild() const {
     return left_child;
 }
 
-void TrieVertex::SetRightChild(TrieVertex* vertex) {
+void TrieVertex::SetRightChild(std::shared_ptr<TrieVertex> vertex) {
     right_child = vertex;
 }
 
-TrieVertex* TrieVertex::GetRightChild() const {
+std::shared_ptr<TrieVertex> TrieVertex::GetRightChild() const {
     return right_child;
 }
 
-TrieVertex* CreateParent(TrieVertex* left_child, TrieVertex* right_child) {
-    TrieVertex* parent = new TrieVertex(left_child->GetCharacterCount() + right_child->GetCharacterCount(), false, 0);
+std::shared_ptr<TrieVertex> CreateParent(std::shared_ptr<TrieVertex>& left_child,
+                                         std::shared_ptr<TrieVertex>& right_child) {
+    std::shared_ptr<TrieVertex> parent = std::make_shared<TrieVertex>(left_child->GetCharacterCount() +
+                                                          right_child->GetCharacterCount(), false, 0);
     parent->SetLeftChild(left_child);
     parent->SetRightChild(right_child);
     return parent;

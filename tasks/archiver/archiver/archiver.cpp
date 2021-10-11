@@ -7,7 +7,7 @@
 #include "trie_vertex.h"
 #include "priority_queue.cpp"
 
-using PQueue = PriorityQueue<TrieVertex*, TrieVertex::Compare>;
+using PQueue = PriorityQueue<std::shared_ptr<TrieVertex>, TrieVertex::Compare>;
 
 namespace {
     const size_t FILENAME_END = 256;
@@ -22,10 +22,10 @@ namespace {
     std::vector<CanonicalCode> haffman_codes;
     size_t symbols_count = 0;
     PQueue queue;
-    TrieVertex* trie_root = nullptr;
+    std::shared_ptr<TrieVertex> trie_root = nullptr;
 }
 
-void TrieDFS(TrieVertex* vertex, size_t current_length) {
+void TrieDFS(std::shared_ptr<TrieVertex> vertex, size_t current_length) {
     if (vertex->IsTerminal()) {
         haffman_codes.push_back(CanonicalCode(current_length, vertex->GetCharacter()));
         return;
@@ -55,18 +55,18 @@ void BuildTrie(std::string& current_file) {
     for (size_t i = 0; i < ALPHABET_CAPACITY; ++i) {
         if (byte_count[i] > 0) {
             ++symbols_count;
-            TrieVertex* vertex = new TrieVertex(byte_count[i], true, i);
+            std::shared_ptr<TrieVertex> vertex = std::make_shared<TrieVertex>(byte_count[i], true, i);
             queue.push(vertex);
         }
     }
 
     while (queue.size() >= 2) {
-        TrieVertex* left_child = queue.top();
+        std::shared_ptr<TrieVertex> left_child = queue.top();
         queue.pop();
-        TrieVertex* right_child = queue.top();
+        std::shared_ptr<TrieVertex> right_child = queue.top();
         queue.pop();
 
-        TrieVertex* parent = CreateParent(left_child, right_child);
+        std::shared_ptr<TrieVertex> parent = CreateParent(left_child, right_child);
         queue.push(parent);
     }
     trie_root = queue.top();
@@ -74,11 +74,10 @@ void BuildTrie(std::string& current_file) {
 
     haffman_codes.reserve(symbols_count);
     TrieDFS(trie_root, 0);
-    delete trie_root;
 
     MakeCanonicalForm();
 
-    for (CanonicalCode& code : haffman_codes) {
+    for (const CanonicalCode& code : haffman_codes) {
         matching_code[code.character] = code.representation;
         matching_code_length[code.character] = code.length;
         ++code_size_count[code.length - 1];
@@ -98,7 +97,7 @@ void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& 
         symbols_count = 0;
         haffman_codes.clear();
         trie_root = nullptr;
-        
+
         reader.OpenFile(current_file);
         while (reader.HasCharacter()) {
             unsigned char character = reader.ReadCharacter();
@@ -155,7 +154,7 @@ void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& 
     writer.PushBufferAndCloseFile();
 }
 
-void AddBranchToTrie(TrieVertex* vertex, CanonicalCode& code, size_t index) {
+void AddBranchToTrie(std::shared_ptr<TrieVertex> vertex, CanonicalCode& code, size_t index) {
     if (index == code.length) {
         vertex->SetCharacter(code.character);
         vertex->SetType(true);
@@ -163,12 +162,12 @@ void AddBranchToTrie(TrieVertex* vertex, CanonicalCode& code, size_t index) {
     }
     if ((code.representation & (static_cast<size_t>(1) << index)) == 0) {
         if (vertex->GetLeftChild() == nullptr) {
-            vertex->SetLeftChild(new TrieVertex(false));
+            vertex->SetLeftChild(std::make_shared<TrieVertex>(false));
         }
         AddBranchToTrie(vertex->GetLeftChild(), code, index + 1);
     } else {
         if (vertex->GetRightChild() == nullptr) {
-            vertex->SetRightChild(new TrieVertex(false));
+            vertex->SetRightChild(std::make_shared<TrieVertex>(false));
         }
         AddBranchToTrie(vertex->GetRightChild(), code, index + 1);
     }
@@ -204,14 +203,14 @@ void Archiver::DecodeFile(std::string& archive_name) {
             --code_size_count[current_code_size];
         }
         MakeCanonicalForm();
-        trie_root = new TrieVertex(false);
+        trie_root = std::make_shared<TrieVertex>(false);
         for (size_t i = 0; i < haffman_codes.size(); ++i) {
             AddBranchToTrie(trie_root, haffman_codes[i], 0);
         }
 
         std::string file_name;
         bool is_file_name_end = false;
-        TrieVertex* current_vertex = trie_root;
+        std::shared_ptr<TrieVertex> current_vertex = trie_root;
         while (!is_file_name_end) {
             size_t bit = reader.Read1Bit();
             if (bit == 0) {
@@ -257,7 +256,6 @@ void Archiver::DecodeFile(std::string& archive_name) {
             }
         }
 
-        delete trie_root;
         writer.PushBufferAndCloseFile();
     }
 

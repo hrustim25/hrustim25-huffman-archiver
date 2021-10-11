@@ -11,6 +11,6 @@ public:
     void PushBufferAndCloseFile();
 private:
     std::ofstream out_stream;
-    unsigned char buffer;
+    unsigned char buffer = 0;
     int current_bit_position = 0;
 };
