@@ -1,47 +1,13 @@
-project(cpp-pilot-hse)
+cmake_minimum_required(VERSION 3.0)
 
-cmake_minimum_required(VERSION 3.8)
+project("Archiver")
 
-set(CMAKE_MODULE_PATH              "${CMAKE_SOURCE_DIR}/cmake")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-set(CMAKE_EXPORT_COMPILE_COMMANDS  ON)
+add_library(archiver_lib STATIC archiver/archiver.cpp)
+add_library(trie_vertex STATIC archiver/trie_vertex.cpp)
+add_library(reader STATIC reader/reader.cpp)
+add_library(writer STATIC writer/writer.cpp)
 
-include(cmake/BuildFlags.cmake)
-include(cmake/TestSolution.cmake)
+add_executable(archiver main.cpp)
 
-find_package(Catch REQUIRED)
-
-include_directories(util)
-
-add_subdirectory(tasks/archiver)
-
-# 0
-add_subdirectory(tasks/multiplication)
-
-# 1
-add_subdirectory(tasks/associative_operation)
-add_subdirectory(tasks/palindrome)
-add_subdirectory(tasks/password)
-add_subdirectory(tasks/sort_students)
-add_subdirectory(tasks/utf8)
-
-#2
-add_subdirectory(tasks/admission)
-add_subdirectory(tasks/scorer)
-add_subdirectory(tasks/search)
-add_subdirectory(tasks/tests_checking)
-add_subdirectory(tasks/unixpath)
-add_subdirectory(tasks/word2vec)
-
-#3
-add_subdirectory(tasks/mines)
-add_subdirectory(tasks/scorer2)
-add_subdirectory(tasks/search2)
-add_subdirectory(tasks/unixpath2)
-
-#4
-add_subdirectory(tasks/cow)
-add_subdirectory(tasks/poly)
-add_subdirectory(tasks/robot)
-add_subdirectory(tasks/zip)
+target_link_libraries(archiver archiver_lib trie_vertex reader writer)
+set_target_properties(archiver PROPERTIES CXX_STANDARD 17)
