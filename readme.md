@@ -40,10 +40,10 @@ sudo apt install make
 ### Building
 From the project directory run:
 ```
-    mkdir build
-    cd build
-    cmake ..
-    make
+mkdir build
+cd build
+cmake ..
+make
 ```
 
 ## Use guide
