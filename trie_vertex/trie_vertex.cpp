@@ -1,13 +1,9 @@
 #include "trie_vertex.h"
 
-TrieVertex::TrieVertex(bool type) {
-    is_terminal = type;
-}
+TrieVertex::TrieVertex(bool type): is_terminal(type) {}
 
 TrieVertex::TrieVertex(size_t character_count, bool type, size_t character): character_count(character_count),
-                                                                               character(character) {
-    is_terminal = type;
-}
+                                                                             character(character), is_terminal(type) {}
 
 void TrieVertex::SetLeftChild(std::shared_ptr<TrieVertex> vertex) {
     left_child = vertex;

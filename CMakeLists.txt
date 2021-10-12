@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
+set(CMAKE_CXX_STANDARD 17)
+
 project("Archiver")
 
 add_library(archiver_lib STATIC archiver/archiver.cpp)
@@ -10,4 +12,3 @@ add_library(writer STATIC writer/writer.cpp)
 add_executable(archiver main.cpp)
 
 target_link_libraries(archiver archiver_lib trie_vertex reader writer)
-set_target_properties(archiver PROPERTIES CXX_STANDARD 17)

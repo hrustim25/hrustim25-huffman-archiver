@@ -28,7 +28,7 @@ void Writer::Write9Bits(size_t value) {
     }
 }
 
-void Writer::OpenFile(std::string& file) {
+void Writer::OpenFile(const std::string& file) {
     out_stream.open(file);
 }
 

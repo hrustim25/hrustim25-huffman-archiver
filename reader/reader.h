@@ -6,8 +6,8 @@ public:
     size_t Read1Bit();
     size_t Read9Bits();
     unsigned char ReadCharacter();
-    bool HasCharacter();
-    void OpenFile(std::string& file);
+    bool HasCharacter() const;
+    void OpenFile(const std::string& file);
     void CloseFile();
 private:
     std::ifstream in_stream;

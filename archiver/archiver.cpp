@@ -6,8 +6,6 @@
 #include "../trie_vertex/trie_vertex.h"
 #include "priority_queue.h"
 
-using PQueue = PriorityQueue<std::shared_ptr<TrieVertex>, TrieVertex::Compare>;
-
 namespace {
     struct CanonicalCode {
         CanonicalCode(size_t representation_length, size_t character): character(character) {
@@ -22,6 +20,14 @@ namespace {
         size_t length = 0;
         size_t character = 0;
     };
+    struct Compare {
+        bool operator() (const std::shared_ptr<TrieVertex> vertex1, const std::shared_ptr<TrieVertex> vertex2)
+                         const {
+            return vertex1->GetCharacterCount() < vertex2->GetCharacterCount();
+        }
+    };
+
+    using PQueue = PriorityQueue<std::shared_ptr<TrieVertex>, Compare>;
 
     const size_t FILENAME_END = 256;
     const size_t ONE_MORE_FILE = 257;

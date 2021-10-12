@@ -1,6 +1,6 @@
 #include "reader.h"
 
-bool Reader::HasCharacter() {
+bool Reader::HasCharacter() const {
     return !in_stream.eof();
 }
 
@@ -32,7 +32,7 @@ unsigned char Reader::ReadCharacter() {
     return result;
 }
 
-void Reader::OpenFile(std::string& file) {
+void Reader::OpenFile(const std::string& file) {
     in_stream.open(file);
     if (in_stream.fail()) {
         std::string error_message = "File not found: " + file;

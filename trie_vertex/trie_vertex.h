@@ -16,12 +16,6 @@ public:
     bool IsTerminal() const;
     void SetType(bool type);
     size_t GetCharacterCount() const;
-    struct Compare {
-        bool operator() (const std::shared_ptr<TrieVertex> vertex1, const std::shared_ptr<TrieVertex> vertex2)
-                         const {
-            return vertex1->GetCharacterCount() < vertex2->GetCharacterCount();
-        }
-    };
 private:
     std::shared_ptr<TrieVertex> left_child = nullptr;
     std::shared_ptr<TrieVertex> right_child = nullptr;

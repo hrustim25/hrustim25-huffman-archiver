@@ -7,7 +7,7 @@ public:
     void Write8Bits(size_t value);
     void Write9Bits(size_t value);
     void WriteHaffmanCode(size_t code, size_t code_length);
-    void OpenFile(std::string& file);
+    void OpenFile(const std::string& file);
     void PushBufferAndCloseFile();
 private:
     std::ofstream out_stream;
