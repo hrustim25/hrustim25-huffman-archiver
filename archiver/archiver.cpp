@@ -97,6 +97,35 @@ void BuildTrie(std::string& current_file) {
     }
 }
 
+void EncodeData(Reader& reader, Writer& writer, std::string& current_file) {
+    writer.Write9Bits(symbols_count);
+    for (CanonicalCode& code : haffman_codes) {
+        writer.Write9Bits(code.character);
+    }
+    size_t max_symbol_code_size = 0;
+    for (size_t i = 0; i < ALPHABET_CAPACITY; ++i) {
+        if (code_size_count[i] > 0) {
+            max_symbol_code_size = i + 1;
+        }
+    }
+    for (size_t i = 0; i < max_symbol_code_size; ++i) {
+        writer.Write9Bits(code_size_count[i]);
+    }
+
+    for (unsigned char character : current_file) {
+        writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
+    }
+    writer.WriteHaffmanCode(matching_code[FILENAME_END], matching_code_length[FILENAME_END]);
+
+    while (reader.HasCharacter()) {
+        unsigned char character = reader.ReadCharacter();
+        if (!reader.HasCharacter()) {
+            break;
+        }
+        writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
+    }
+}
+
 void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& files) {
     writer.OpenFile(archive_name);
     for (size_t file_index = 0; file_index < files.size(); ++file_index) {
@@ -129,39 +158,13 @@ void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& 
         reader.CloseFile();
 
         reader.OpenFile(current_file);
-        writer.Write9Bits(symbols_count);
-        for (CanonicalCode& code : haffman_codes) {
-            writer.Write9Bits(code.character);
-        }
-        size_t max_symbol_code_size = 0;
-        for (size_t i = 0; i < ALPHABET_CAPACITY; ++i) {
-            if (code_size_count[i] > 0) {
-                max_symbol_code_size = i + 1;
-            }
-        }
-        for (size_t i = 0; i < max_symbol_code_size; ++i) {
-            writer.Write9Bits(code_size_count[i]);
-        }
-
-        for (unsigned char character : current_file) {
-            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
-        }
-        writer.WriteHaffmanCode(matching_code[FILENAME_END], matching_code_length[FILENAME_END]);
-
-        while (reader.HasCharacter()) {
-            unsigned char character = reader.ReadCharacter();
-            if (!reader.HasCharacter()) {
-                break;
-            }
-            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
-        }
+        EncodeData(reader, writer, current_file);
 
         if (file_index + 1 < files.size()) {
             writer.WriteHaffmanCode(matching_code[ONE_MORE_FILE], matching_code_length[ONE_MORE_FILE]);
         } else {
             writer.WriteHaffmanCode(matching_code[ARCHIVE_END], matching_code_length[ARCHIVE_END]);
         }
-
         reader.CloseFile();
     }
     writer.PushBufferAndCloseFile();
@@ -183,6 +186,58 @@ void AddBranchToTrie(std::shared_ptr<TrieVertex> vertex, CanonicalCode& code, si
             vertex->SetRightChild(std::make_shared<TrieVertex>(false));
         }
         AddBranchToTrie(vertex->GetRightChild(), code, index + 1);
+    }
+}
+
+std::string ReadFileName(Reader& reader) {
+    std::string file_name;
+    bool is_file_name_end = false;
+    std::shared_ptr<TrieVertex> current_vertex = trie_root;
+    while (!is_file_name_end) {
+        size_t bit = reader.Read1Bit();
+        if (bit == 0) {
+            current_vertex = current_vertex->GetLeftChild();
+        } else {
+            current_vertex = current_vertex->GetRightChild();
+        }
+
+        if (current_vertex->IsTerminal()) {
+            size_t character = current_vertex->GetCharacter();
+            if (character == FILENAME_END) {
+                is_file_name_end = true;
+                break;
+            } else {
+                file_name += static_cast<unsigned char>(current_vertex->GetCharacter());
+                current_vertex = trie_root;
+            }
+        }
+    }
+    return file_name;
+}
+
+void DecodeData(Reader& reader, Writer& writer, std::string& file_name, bool& is_archive_end) {
+    bool is_data_end = false;
+    std::shared_ptr<TrieVertex> current_vertex = trie_root;
+    while (!is_data_end) {
+        size_t bit = reader.Read1Bit();
+        if (bit == 0) {
+            current_vertex = current_vertex->GetLeftChild();
+        } else {
+            current_vertex = current_vertex->GetRightChild();
+        }
+
+        if (current_vertex->IsTerminal()) {
+            if (current_vertex->GetCharacter() == ARCHIVE_END) {
+                is_data_end = true;
+                is_archive_end = true;
+                break;
+            } else if (current_vertex->GetCharacter() == ONE_MORE_FILE) {
+                is_data_end = true;
+                break;
+            }
+            writer.Write8Bits(current_vertex->GetCharacter());
+            current_vertex = trie_root;
+        }
     }
 }
 
@@ -221,54 +276,10 @@ void Archiver::DecodeFile(std::string& archive_name) {
             AddBranchToTrie(trie_root, haffman_codes[i], 0);
         }
 
-        std::string file_name;
-        bool is_file_name_end = false;
-        std::shared_ptr<TrieVertex> current_vertex = trie_root;
-        while (!is_file_name_end) {
-            size_t bit = reader.Read1Bit();
-            if (bit == 0) {
-                current_vertex = current_vertex->GetLeftChild();
-            } else {
-                current_vertex = current_vertex->GetRightChild();
-            }
+        std::string file_name = ReadFileName(reader);
 
-            if (current_vertex->IsTerminal()) {
-                size_t character = current_vertex->GetCharacter();
-                if (character == FILENAME_END) {
-                    is_file_name_end = true;
-                    break;
-                } else {
-                    file_name += static_cast<unsigned char>(current_vertex->GetCharacter());
-                    current_vertex = trie_root;
-                }
-            }
-        }
         writer.OpenFile(file_name);
-
-        bool is_data_end = false;
-        current_vertex = trie_root;
-        while (!is_data_end) {
-            size_t bit = reader.Read1Bit();
-            if (bit == 0) {
-                current_vertex = current_vertex->GetLeftChild();
-            } else {
-                current_vertex = current_vertex->GetRightChild();
-            }
-
-            if (current_vertex->IsTerminal()) {
-                if (current_vertex->GetCharacter() == ARCHIVE_END) {
-                    is_data_end = true;
-                    is_archive_end = true;
-                    break;
-                } else if (current_vertex->GetCharacter() == ONE_MORE_FILE) {
-                    is_data_end = true;
-                    break;
-                }
-                writer.Write8Bits(current_vertex->GetCharacter());
-                current_vertex = trie_root;
-            }
-        }
-
+        DecodeData(reader, writer, file_name, is_archive_end);
         writer.PushBufferAndCloseFile();
     }
 
