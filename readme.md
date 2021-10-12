@@ -13,7 +13,7 @@ due to inner construction of the algorithm.
 
 ## Benchmarks
 
-The benchmark uses compiler version GCC v9.3.0 on Linux 64-bits (Ubuntu 20.04). The reference system uses a Core i3-8130U CPU @ 2.2GHz. All evaluations made in single-thread mode.
+The benchmark uses compiler GCC v9.3.0 on Linux 64-bits (Ubuntu 20.04). The reference system uses a Core i3-8130U CPU @ 2.2GHz. All evaluations made in single-thread mode.
 |  Compression type     | Ratio   | Compression | Decompression |
 |  ----------           | -----   | ----------- | ------------- |
 |  Text                 |  1.548  |   2.8 MB/s  |    1.1 MB/s   |
@@ -26,27 +26,28 @@ The benchmark uses compiler version GCC v9.3.0 on Linux 64-bits (Ubuntu 20.04). 
 ## Installation
 
 You need to install
+
 [Cmake](https://en.wikipedia.org/wiki/CMake):
-'''
+```
 sudo apt install cmake
-'''
+```
 
 [Make](https://en.wikipedia.org/wiki/Make_(software)):
-'''
+```
 sudo apt install make
-'''
+```
 
 ### Building
 From the project directory run:
-'''
+```
     mkdir build
     cd build
     cmake ..
     make
-'''
+```
 
 ## Use guide
 You can find command list and their description using:
-'''
+```
 ./archiver -h
-'''
+```
