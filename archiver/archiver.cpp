@@ -3,13 +3,26 @@
 #include <tuple>
 
 #include "archiver.h"
-#include "canonical_haffman_code.cpp"
-#include "trie_vertex.h"
-#include "priority_queue.cpp"
+#include "../trie_vertex/trie_vertex.h"
+#include "priority_queue.h"
 
 using PQueue = PriorityQueue<std::shared_ptr<TrieVertex>, TrieVertex::Compare>;
 
 namespace {
+    struct CanonicalCode {
+        CanonicalCode(size_t representation_length, size_t character): character(character) {
+            length = representation_length;
+        }
+
+        bool operator<(const CanonicalCode& code) const {
+            return std::tie(length, character) < std::tie(code.length, code.character);
+        }
+
+        size_t representation = 0;
+        size_t length = 0;
+        size_t character = 0;
+    };
+
     const size_t FILENAME_END = 256;
     const size_t ONE_MORE_FILE = 257;
     const size_t ARCHIVE_END = 258;
@@ -116,9 +129,9 @@ void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& 
         reader.CloseFile();
 
         reader.OpenFile(current_file);
-        writer.Write9Bits(symbols_count);  // 1
+        writer.Write9Bits(symbols_count);
         for (CanonicalCode& code : haffman_codes) {
-            writer.Write9Bits(code.character);  // 2.1
+            writer.Write9Bits(code.character);
         }
         size_t max_symbol_code_size = 0;
         for (size_t i = 0; i < ALPHABET_CAPACITY; ++i) {
@@ -127,26 +140,26 @@ void Archiver::EncodeFiles(std::string& archive_name, std::vector<std::string>& 
             }
         }
         for (size_t i = 0; i < max_symbol_code_size; ++i) {
-            writer.Write9Bits(code_size_count[i]);  // 2.2
+            writer.Write9Bits(code_size_count[i]);
         }
 
         for (unsigned char character : current_file) {
-            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);  // 3
+            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
         }
-        writer.WriteHaffmanCode(matching_code[FILENAME_END], matching_code_length[FILENAME_END]);  // 4
+        writer.WriteHaffmanCode(matching_code[FILENAME_END], matching_code_length[FILENAME_END]);
 
         while (reader.HasCharacter()) {
             unsigned char character = reader.ReadCharacter();
             if (!reader.HasCharacter()) {
                 break;
             }
-            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);  // 5
+            writer.WriteHaffmanCode(matching_code[character], matching_code_length[character]);
         }
 
         if (file_index + 1 < files.size()) {
-            writer.WriteHaffmanCode(matching_code[ONE_MORE_FILE], matching_code_length[ONE_MORE_FILE]);  // 6
+            writer.WriteHaffmanCode(matching_code[ONE_MORE_FILE], matching_code_length[ONE_MORE_FILE]);
         } else {
-            writer.WriteHaffmanCode(matching_code[ARCHIVE_END], matching_code_length[ARCHIVE_END]);  // 7
+            writer.WriteHaffmanCode(matching_code[ARCHIVE_END], matching_code_length[ARCHIVE_END]);
         }
 
         reader.CloseFile();
